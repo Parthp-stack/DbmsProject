@@ -1,0 +1,338 @@
+/* ==========================================================================
+   NBN Sinhgad Technical Institute Campus (SAMS)
+   Comprehensive Mobile & Responsive Stylesheet
+   Tailored to fit perfectly on ANY screen: 320px to 4K
+   ========================================================================== */
+
+/* Prevent horizontal body overflow on small viewports */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* --------------------------------------------------------------------------
+   1. TABLETS & SCREENS UNDER 992px
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .sidebar {
+    width: min(290px, 84vw);
+    transform: translateX(-100%);
+    box-shadow: none;
+    z-index: 1050;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.4);
+  }
+
+  .sidebar-close-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: var(--bg-subtle);
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .main-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .hamburger-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0.4rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+  }
+
+  .top-navbar {
+    padding: 0 1rem;
+    height: 60px;
+  }
+
+  .content-body {
+    padding: 1.25rem 1rem;
+  }
+
+  .profile-card-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Admin dashboard 2-col activity grid stacks */
+  div[style*="grid-template-columns: 2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. MOBILE LANDSCAPE & MEDIUM SCREENS (<= 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Prevent iOS input auto-zoom by enforcing 16px minimum font size */
+  .form-control, .form-select, input, select, textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  .btn {
+    min-height: 42px;
+    padding: 0.55rem 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .stat-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    font-size: 1.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.35rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .toolbar-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .search-input-wrapper {
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  #semester-filter, #filter-marks-student, #filter-att-student {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Table Container on Mobile */
+  .table-container {
+    border-radius: var(--radius-md);
+    position: relative;
+    box-shadow: inset -5px 0 8px -4px rgba(0,0,0,0.1);
+  }
+
+  .table-scroll-hint {
+    display: block !important;
+  }
+
+  .table th {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .table td {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  /* Modals Mobile Adaptation */
+  .modal-backdrop {
+    padding: 0.5rem;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 94vh;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-header, .modal-footer {
+    padding: 0.85rem 1rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.6rem !important;
+  }
+
+  /* Marksheet Print Sheet on Mobile */
+  .result-sheet {
+    padding: 1.25rem 0.85rem;
+    border-radius: var(--radius-md);
+  }
+
+  .result-college-title {
+    font-size: 1.15rem !important;
+    line-height: 1.25;
+  }
+
+  .result-subhead {
+    font-size: 0.8rem !important;
+  }
+
+  .result-meta-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.4rem !important;
+    padding: 0.85rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .result-summary-box {
+    flex-direction: column;
+    gap: 0.65rem;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .result-table th, .result-table td {
+    padding: 0.5rem 0.4rem !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. COMPACT PHONES & VERY SMALL SCREENS (<= 480px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.15rem; }
+  h3 { font-size: 1.05rem; }
+
+  .page-title {
+    font-size: 1.05rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .table-actions {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .table-actions .btn {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  /* Result Sheet Signatures Stack on Small Mobile */
+  .result-sheet div[style*="display: flex; justify-content: space-between; margin-top: 3.5rem"] {
+    flex-direction: column !important;
+    gap: 1.75rem !important;
+    align-items: center !important;
+    margin-top: 2rem !important;
+  }
+
+  /* Toast Alerts Mobile Width */
+  .toast {
+    min-width: 260px;
+    max-width: calc(100vw - 2rem);
+    font-size: 0.82rem;
+  }
+
+  #toast-container {
+    top: 0.75rem;
+    right: 0.75rem;
+    left: 0.75rem;
+    align-items: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. ULTRA-SMALL SCREENS (e.g. 320px - 360px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 360px) {
+  .top-navbar {
+    padding: 0 0.6rem;
+  }
+
+  .content-body {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .stat-card {
+    padding: 0.85rem 0.65rem;
+  }
+
+  .btn {
+    font-size: 0.82rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Visual swipe cue for tables on touch screens */
+.table-scroll-hint {
+  display: none;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-align: center;
+}

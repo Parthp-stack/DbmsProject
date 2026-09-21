@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management | SAMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/db-service.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/students.js"></script>
+</head>
+<body>
+
+  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h2>NBN Sinhgad</h2>
+          <span>Technical Institute Campus</span>
+        </div>
+        <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close sidebar">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Navigation</div>
+        <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="students.html" class="nav-link active"><span class="nav-icon">👨‍🎓</span> Students</a>
+        <a href="subjects.html" class="nav-link"><span class="nav-icon">📚</span> Subjects</a>
+        <a href="marks.html" class="nav-link"><span class="nav-icon">📝</span> Marks</a>
+        <a href="attendance.html" class="nav-link"><span class="nav-icon">📅</span> Attendance</a>
+        <a href="result.html" class="nav-link"><span class="nav-icon">📄</span> Results</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="display-user-avatar">A</div>
+          <div class="user-details">
+            <div class="user-name" id="display-user-name">Administrator</div>
+            <div class="user-role-badge">ADMIN</div>
+          </div>
+        </div>
+        <button onclick="auth.logout()" class="btn btn-sm btn-secondary" style="width: 100%;">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="top-navbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+          <h1 class="page-title">Students Directory</h1>
+        </div>
+        <div class="topbar-right">
+          <span class="badge badge-primary" id="student-count-badge">Loading...</span>
+          <button onclick="toggleTheme()" class="theme-toggle-btn">🌙 Dark</button>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="toolbar-filters">
+            <div class="search-input-wrapper">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="student-search" class="form-control" placeholder="Search by name, roll no, enrollment, or course...">
+            </div>
+
+            <select id="semester-filter" class="form-select" style="max-width: 170px;">
+              <option value="">All Semesters</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+              <option value="7">Semester 7</option>
+              <option value="8">Semester 8</option>
+            </select>
+          </div>
+
+          <button onclick="openAddModal()" class="btn btn-primary">
+            <span>➕</span> Add Student
+          </button>
+        </div>
+
+        <!-- Students Table -->
+        <div class="table-container">
+          <div class="table-scroll-hint">👈 Swipe table horizontally to view all columns 👉</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Roll No</th>
+                <th>Enrollment No</th>
+                <th>Student & Email</th>
+                <th>Course</th>
+                <th>Semester</th>
+                <th>Division</th>
+                <th>Phone</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="students-table-body">
+              <tr><td colspan="8" class="text-center" style="padding: 2.5rem;">Loading student records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Add / Edit Student Modal -->
+  <div class="modal-backdrop" id="student-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-student-title">Add New Student</h3>
+        <button class="modal-close" onclick="closeStudentModal()">✕</button>
+      </div>
+      <form id="student-form">
+        <div class="modal-body">
+          <input type="hidden" id="student-id-field">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required" for="input-roll-no">Roll Number</label>
+              <input type="text" id="input-roll-no" class="form-control" placeholder="e.g. CS2026-11" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="input-enrollment-no">Enrollment Number</label>
+              <input type="text" id="input-enrollment-no" class="form-control" placeholder="e.g. EN20260011" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required" for="input-name">Full Name</label>
+            <input type="text" id="input-name" class="form-control" placeholder="Student Full Name" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required" for="input-email">Email Address</label>
+              <input type="email" id="input-email" class="form-control" placeholder="student@college.edu" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-phone">Phone Number</label>
+              <input type="tel" id="input-phone" class="form-control" placeholder="10-digit Mobile">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required" for="input-course">Course</label>
+              <input type="text" id="input-course" class="form-control" placeholder="e.g. B.Tech CSE" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="input-semester">Semester</label>
+              <select id="input-semester" class="form-select" required>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3" selected>Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-division">Division</label>
+              <input type="text" id="input-division" class="form-control" placeholder="A" value="A">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeStudentModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Student Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Student Profile Modal -->
+  <div class="modal-backdrop" id="view-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Student Academic Profile</h3>
+        <button class="modal-close" onclick="closeViewModal()">✕</button>
+      </div>
+      <div class="modal-body" id="view-modal-body">
+        <!-- Rendered by students.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeViewModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

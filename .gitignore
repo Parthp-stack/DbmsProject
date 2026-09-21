@@ -1,0 +1,10 @@
+# Environment & Local Files
+.env
+.env.local
+
+# Operating System files
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log

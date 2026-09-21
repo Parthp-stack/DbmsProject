@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | SAMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/db-service.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</head>
+<body>
+
+  <!-- Mobile Overlay -->
+  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h2>NBN Sinhgad</h2>
+          <span>Technical Institute Campus</span>
+        </div>
+        <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close sidebar">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Navigation</div>
+        <a href="admin-dashboard.html" class="nav-link active"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="students.html" class="nav-link"><span class="nav-icon">👨‍🎓</span> Students</a>
+        <a href="subjects.html" class="nav-link"><span class="nav-icon">📚</span> Subjects</a>
+        <a href="marks.html" class="nav-link"><span class="nav-icon">📝</span> Marks</a>
+        <a href="attendance.html" class="nav-link"><span class="nav-icon">📅</span> Attendance</a>
+        <a href="result.html" class="nav-link"><span class="nav-icon">📄</span> Results</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="display-user-avatar">A</div>
+          <div class="user-details">
+            <div class="user-name" id="display-user-name">Administrator</div>
+            <div class="user-role-badge">ADMIN</div>
+          </div>
+        </div>
+        <button onclick="auth.logout()" class="btn btn-sm btn-secondary" style="width: 100%;">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+      <header class="top-navbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+          <h1 class="page-title">Admin Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <button onclick="toggleTheme()" class="theme-toggle-btn">🌙 Dark</button>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <!-- 4 Metric Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper stat-icon-indigo">👨‍🎓</div>
+            <div class="stat-info">
+              <div class="stat-label">Total Students</div>
+              <div class="stat-value" id="stat-total-students">--</div>
+              <div class="stat-subtext">Active Enrolled</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper stat-icon-sky">📚</div>
+            <div class="stat-info">
+              <div class="stat-label">Total Subjects</div>
+              <div class="stat-value" id="stat-total-subjects">--</div>
+              <div class="stat-subtext">Semester Curriculum</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper stat-icon-emerald">📅</div>
+            <div class="stat-info">
+              <div class="stat-label">Avg Attendance</div>
+              <div class="stat-value" id="stat-avg-attendance">--%</div>
+              <div class="stat-subtext">Overall Class Presence</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper stat-icon-amber">📈</div>
+            <div class="stat-info">
+              <div class="stat-label">Avg Performance</div>
+              <div class="stat-value" id="stat-avg-performance">--%</div>
+              <div class="stat-subtext">Overall Academic Score</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Recent Activity -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+          <!-- Recent Students Table -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Recently Enrolled Students</h3>
+              <a href="students.html" class="btn btn-sm btn-outline">View All Students →</a>
+            </div>
+            <div class="table-container" style="border: none; box-shadow: none;">
+              <div class="table-scroll-hint">👈 Swipe table horizontally to view all columns 👉</div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Semester</th>
+                    <th>Division</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-students-table">
+                  <tr><td colspan="5" class="text-center" style="padding: 2rem;">Loading student data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Action Panel -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Quick Actions</h3>
+            </div>
+            <div class="card-body" style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <a href="students.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                <span>➕</span> Add New Student
+              </a>
+              <a href="subjects.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                <span>📚</span> Add Subject Curriculum
+              </a>
+              <a href="marks.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                <span>📝</span> Record Examination Marks
+              </a>
+              <a href="attendance.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                <span>📅</span> Update Class Attendance
+              </a>
+              <a href="result.html" class="btn btn-primary" style="justify-content: flex-start;">
+                <span>📄</span> Generate & Print Results
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

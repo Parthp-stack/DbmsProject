@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal | NBN Sinhgad Technical Institute Campus</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/db-service.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/student.js"></script>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-navbar" style="position: static; border-bottom: 1px solid var(--border-color); padding: 0.75rem 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <div class="brand-icon">🎓</div>
+      <div>
+        <h2 style="font-size: 1.1rem; margin: 0; line-height: 1.2;">NBN Sinhgad</h2>
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Technical Institute Campus • Student Portal</span>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <button onclick="toggleTheme()" class="theme-toggle-btn">🌙 Dark</button>
+      <button onclick="auth.logout()" class="btn btn-sm btn-secondary">🚪 Logout</button>
+    </div>
+  </header>
+
+  <main style="max-width: 1200px; margin: 1.75rem auto; padding: 0 1.5rem;">
+    <!-- Welcome Header Banner -->
+    <div class="card" style="margin-bottom: 1.75rem; padding: 1.5rem 1.75rem; background: linear-gradient(135deg, var(--primary), #4338ca); color: #ffffff;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span style="background: rgba(255, 255, 255, 0.2); padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Student Account</span>
+          <h1 style="font-size: 1.8rem; margin: 0.4rem 0 0.2rem; color: #ffffff;">Welcome, <span id="student-welcome-name">Student</span>!</h1>
+          <p style="color: #e0e7ff; margin: 0; font-size: 0.95rem;">Monitor your semester progress, attendance, and exam grades in real-time.</p>
+        </div>
+        <div>
+          <a href="result.html" class="btn btn-secondary" style="background: #ffffff; color: var(--primary); border: none; font-weight: 700; box-shadow: var(--shadow-md);">
+            📄 View Official Result Sheet
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Academic Overview Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-emerald">📅</div>
+        <div class="stat-info">
+          <div class="stat-label">Overall Attendance</div>
+          <div class="stat-value" id="student-stat-attendance">--%</div>
+          <div class="stat-subtext">Class Attendance Rate</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-indigo">📈</div>
+        <div class="stat-info">
+          <div class="stat-label">Average Score</div>
+          <div class="stat-value" id="student-stat-marks">--%</div>
+          <div class="stat-subtext">Overall Percentage</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-sky">📚</div>
+        <div class="stat-info">
+          <div class="stat-label">Enrolled Subjects</div>
+          <div class="stat-value" id="student-stat-subjects">--</div>
+          <div class="stat-subtext">Active Courses</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-amber">🏆</div>
+        <div class="stat-info">
+          <div class="stat-label">Academic Status</div>
+          <div class="stat-value" id="student-stat-result">--</div>
+          <div class="stat-subtext">Semester Result</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile & Information Grid -->
+    <div class="profile-card-grid" style="margin-bottom: 2rem;">
+      <!-- Profile Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Personal Academic Profile</h3>
+        </div>
+        <div class="card-body">
+          <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div class="avatar-large" id="student-avatar-letter">S</div>
+            <h3 id="profile-name" style="margin-bottom: 0.2rem;">--</h3>
+            <span class="badge badge-primary" id="profile-course">--</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.88rem;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+              <span style="color: var(--text-muted);">Roll Number:</span>
+              <strong id="profile-roll">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+              <span style="color: var(--text-muted);">Enrollment No:</span>
+              <strong id="profile-enrollment">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+              <span style="color: var(--text-muted);">Semester:</span>
+              <strong id="profile-sem">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+              <span style="color: var(--text-muted);">Division:</span>
+              <strong id="profile-div">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+              <span style="color: var(--text-muted);">Email:</span>
+              <strong id="profile-email">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Phone:</span>
+              <strong id="profile-phone">--</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marks Breakdown -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Examination Marks Breakdown</h3>
+          <a href="result.html" class="btn btn-sm btn-outline">Full Marksheet →</a>
+        </div>
+        <div class="table-container" style="border: none; box-shadow: none;">
+          <div class="table-scroll-hint">👈 Swipe table horizontally to view all columns 👉</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Internal (40)</th>
+                <th>External (60)</th>
+                <th>Total (100)</th>
+                <th>Grade</th>
+              </tr>
+            </thead>
+            <tbody id="student-marks-body">
+              <tr><td colspan="6" class="text-center" style="padding: 2rem;">Loading marks...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Breakdown Section -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <h3>Subject-wise Attendance Record</h3>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Requirement: 75% or above</span>
+      </div>
+      <div class="table-container" style="border: none; box-shadow: none;">
+        <div class="table-scroll-hint">👈 Swipe table horizontally to view all columns 👉</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Total Lectures</th>
+              <th>Attended</th>
+              <th>Percentage</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="student-attendance-body">
+            <tr><td colspan="5" class="text-center" style="padding: 2rem;">Loading attendance records...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer style="text-align: center; padding: 1.75rem 1rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border-color);">
+    © 2026 NBN Sinhgad Technical Institute Campus • SAMS Portal
+  </footer>
+
+</body>
+</html>

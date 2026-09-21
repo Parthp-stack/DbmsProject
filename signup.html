@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | NBN Sinhgad Technical Institute Campus</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/db-service.js"></script>
+  <script src="js/auth.js"></script>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem 1rem; background: var(--bg-body);">
+
+  <div class="card" style="width: 100%; max-width: 580px; box-shadow: var(--shadow-xl);">
+    <div class="card-header" style="text-align: center; display: block; padding: 1.75rem 1.25rem 1rem;">
+      <div style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), #818cf8); color: #fff; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 0.75rem;">🎓</div>
+      <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem; line-height: 1.25;">NBN Sinhgad</h2>
+      <div style="font-size: 0.8rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.35rem;">Technical Institute Campus</div>
+      <p style="font-size: 0.85rem; margin: 0; color: var(--text-muted);">Create Student or Teacher Account</p>
+    </div>
+
+    <div class="card-body" style="padding: 1.75rem;">
+      <!-- Role Toggle Tabs -->
+      <div style="display: flex; background: var(--bg-subtle); padding: 4px; border-radius: var(--radius-md); margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+        <button type="button" id="tab-student" onclick="switchRole('student')" style="flex: 1; padding: 0.6rem; border: none; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.9rem; cursor: pointer; background: var(--primary); color: #fff; transition: all 0.2s;">
+          🎓 Student
+        </button>
+        <button type="button" id="tab-teacher" onclick="switchRole('admin')" style="flex: 1; padding: 0.6rem; border: none; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.9rem; cursor: pointer; background: transparent; color: var(--text-muted); transition: all 0.2s;">
+          👨‍🏫 Teacher / Faculty
+        </button>
+      </div>
+
+      <form id="signup-form">
+        <input type="hidden" id="signup-role" value="student">
+
+        <!-- Common Fields: Name, Email, Password -->
+        <div class="form-group">
+          <label class="form-label required" for="signup-name">Full Name</label>
+          <input type="text" id="signup-name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label required" for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" class="form-control" placeholder="user@college.edu" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label required" for="signup-password">Password</label>
+            <input type="password" id="signup-password" class="form-control" placeholder="Min. 6 characters" minlength="6" required autocomplete="new-password">
+          </div>
+        </div>
+
+        <!-- Student-Specific Section -->
+        <div id="student-fields">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required" for="signup-roll">Roll Number</label>
+              <input type="text" id="signup-roll" class="form-control" placeholder="e.g. CS2026-15">
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="signup-enrollment">Enrollment Number</label>
+              <input type="text" id="signup-enrollment" class="form-control" placeholder="e.g. EN20260015">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required" for="signup-course">Course / Degree</label>
+              <input type="text" id="signup-course" class="form-control" placeholder="e.g. B.Tech CSE" value="B.Tech CSE">
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="signup-semester">Semester</label>
+              <select id="signup-semester" class="form-select">
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3" selected>Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="signup-division">Division</label>
+              <input type="text" id="signup-division" class="form-control" placeholder="A" value="A">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signup-phone">Phone Number</label>
+              <input type="tel" id="signup-phone" class="form-control" placeholder="10-digit mobile">
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher / Faculty-Specific Section -->
+        <div id="teacher-fields" style="display: none;">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required" for="signup-department">Department</label>
+              <input type="text" id="signup-department" class="form-control" placeholder="e.g. Computer Science & Engineering">
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="signup-faculty-id">Faculty / Employee ID</label>
+              <input type="text" id="signup-faculty-id" class="form-control" placeholder="e.g. FAC-105">
+            </div>
+          </div>
+        </div>
+
+        <div id="signup-error-msg" style="display: none; padding: 0.75rem; border-radius: var(--radius-md); background: var(--danger-light); color: var(--danger-text); font-size: 0.85rem; margin-bottom: 1.25rem; font-weight: 500;"></div>
+
+        <button type="submit" id="btn-signup-submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem;">
+          Create Student Account →
+        </button>
+      </form>
+    </div>
+
+    <div class="card-footer" style="text-align: center; font-size: 0.88rem;">
+      Already have an account? <a href="login.html" style="font-weight: 600;">Sign In here</a>
+    </div>
+  </div>
+
+  <script>
+    let currentRole = 'student';
+
+    function switchRole(role) {
+      currentRole = role;
+      document.getElementById('signup-role').value = role;
+
+      const tabStudent = document.getElementById('tab-student');
+      const tabTeacher = document.getElementById('tab-teacher');
+      const studentFields = document.getElementById('student-fields');
+      const teacherFields = document.getElementById('teacher-fields');
+      const submitBtn = document.getElementById('btn-signup-submit');
+
+      const rollInput = document.getElementById('signup-roll');
+      const enrollInput = document.getElementById('signup-enrollment');
+      const courseInput = document.getElementById('signup-course');
+      const deptInput = document.getElementById('signup-department');
+      const facInput = document.getElementById('signup-faculty-id');
+
+      if (role === 'student') {
+        tabStudent.style.background = 'var(--primary)';
+        tabStudent.style.color = '#fff';
+        tabTeacher.style.background = 'transparent';
+        tabTeacher.style.color = 'var(--text-muted)';
+        studentFields.style.display = 'block';
+        teacherFields.style.display = 'none';
+        submitBtn.textContent = 'Create Student Account →';
+
+        rollInput.required = true;
+        enrollInput.required = true;
+        courseInput.required = true;
+        deptInput.required = false;
+        facInput.required = false;
+      } else {
+        tabTeacher.style.background = 'var(--primary)';
+        tabTeacher.style.color = '#fff';
+        tabStudent.style.background = 'transparent';
+        tabStudent.style.color = 'var(--text-muted)';
+        studentFields.style.display = 'none';
+        teacherFields.style.display = 'block';
+        submitBtn.textContent = 'Create Teacher Account →';
+
+        rollInput.required = false;
+        enrollInput.required = false;
+        courseInput.required = false;
+        deptInput.required = true;
+        facInput.required = true;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      switchRole('student');
+
+      const form = document.getElementById('signup-form');
+      const errorMsg = document.getElementById('signup-error-msg');
+      const submitBtn = document.getElementById('btn-signup-submit');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = 'none';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<div class="spinner"></div> Creating Account...';
+
+        const role = document.getElementById('signup-role').value;
+        const name = document.getElementById('signup-name').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value;
+
+        const payload = {
+          role: role,
+          name: name,
+          email: email,
+          password: password,
+          roll_no: document.getElementById('signup-roll').value.trim(),
+          enrollment_no: document.getElementById('signup-enrollment').value.trim(),
+          course: document.getElementById('signup-course').value.trim(),
+          semester: document.getElementById('signup-semester').value,
+          division: document.getElementById('signup-division').value.trim() || 'A',
+          phone: document.getElementById('signup-phone').value.trim(),
+          department: document.getElementById('signup-department').value.trim(),
+          faculty_id: document.getElementById('signup-faculty-id').value.trim()
+        };
+
+        try {
+          const sessionUser = await auth.signup(payload);
+          showToast(`Account created successfully! Welcome, ${sessionUser.name}`, 'success');
+          setTimeout(() => {
+            if (sessionUser.role === 'admin') {
+              window.location.href = 'admin-dashboard.html';
+            } else {
+              window.location.href = 'student-dashboard.html';
+            }
+          }, 800);
+        } catch (err) {
+          errorMsg.textContent = err.message || "Registration failed. Please check details.";
+          errorMsg.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = role === 'student' ? 'Create Student Account →' : 'Create Teacher Account →';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

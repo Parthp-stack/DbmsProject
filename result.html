@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Result & Marksheet | SAMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/db-service.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/result.js"></script>
+</head>
+<body style="background-color: var(--bg-body); padding: 1.5rem 1rem;">
+
+  <!-- Action Bar (Hidden during print) -->
+  <div class="no-print" style="max-width: 850px; margin: 0 auto 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <a href="admin-dashboard.html" id="back-dashboard-btn" class="btn btn-secondary">← Back to Dashboard</a>
+      
+      <!-- Student Selector (Visible only to Admin) -->
+      <div id="admin-student-selector-container" style="display: none;">
+        <select id="select-result-student" class="form-select" style="min-width: 260px;">
+          <option value="">Select Student...</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <button onclick="toggleTheme()" class="theme-toggle-btn">🌙 Dark</button>
+      <button id="btn-print-result" class="btn btn-primary">🖨️ Print Marksheet</button>
+    </div>
+  </div>
+
+  <!-- Printable Official Marksheet Card -->
+  <div class="result-sheet">
+    <div class="result-header">
+      <div style="font-size: 2.2rem; margin-bottom: 0.3rem;">🏛️</div>
+      <div class="result-college-title">NBN Sinhgad Technical Institute Campus</div>
+      <div class="result-subhead">Approved by AICTE, New Delhi & Affiliated to SPPU, Pune • Accredited 'A' Grade</div>
+      <div style="font-weight: 700; margin-top: 0.75rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--primary); font-size: 0.95rem;">
+        Statement of Academic Performance & Grades
+      </div>
+    </div>
+
+    <!-- Student Meta Details -->
+    <div class="result-meta-grid">
+      <div><strong>Student Name:</strong> <span id="res-student-name">--</span></div>
+      <div><strong>Roll Number:</strong> <span id="res-roll-no">--</span></div>
+      <div><strong>Enrollment No:</strong> <span id="res-enrollment-no">--</span></div>
+      <div><strong>Degree Course:</strong> <span id="res-course">--</span></div>
+      <div><strong>Semester:</strong> <span id="res-semester">--</span></div>
+      <div><strong>Division:</strong> <span id="res-division">--</span></div>
+    </div>
+
+    <!-- Marks Breakdown Table -->
+    <div class="table-container" style="border: none; box-shadow: none; margin-bottom: 1.5rem;">
+      <div class="table-scroll-hint">👈 Swipe table horizontally to view all columns 👉</div>
+      <table class="result-table">
+      <thead>
+        <tr>
+          <th style="width: 45px;">#</th>
+          <th style="width: 100px;">Sub Code</th>
+          <th class="text-left">Course / Subject Title</th>
+          <th style="width: 90px;">Internal (40)</th>
+          <th style="width: 90px;">External (60)</th>
+          <th style="width: 100px;">Total (100)</th>
+          <th style="width: 110px;">Grade (GP)</th>
+        </tr>
+      </thead>
+      <tbody id="res-table-body">
+        <tr><td colspan="7" style="padding: 2rem;">Loading academic performance...</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- Cumulative Summary Box -->
+    <div class="result-summary-box">
+      <div>
+        <span style="font-size: 0.85rem; color: #64748b; text-transform: uppercase; display: block; font-weight: 600;">Total Aggregate</span>
+        <span id="res-total-score" style="color: #0f172a;">--</span>
+      </div>
+
+      <div>
+        <span style="font-size: 0.85rem; color: #64748b; text-transform: uppercase; display: block; font-weight: 600;">Percentage</span>
+        <span id="res-percentage" style="color: #0f172a;">--%</span>
+      </div>
+
+      <div>
+        <span style="font-size: 0.85rem; color: #64748b; text-transform: uppercase; display: block; font-weight: 600;">Final Status</span>
+        <span id="res-status" class="badge badge-success" style="font-size: 1rem; padding: 0.35rem 1rem;">PASS</span>
+      </div>
+    </div>
+
+    <!-- Official Signatures -->
+    <div style="display: flex; justify-content: space-between; margin-top: 3.5rem; padding-top: 1rem;">
+      <div style="text-align: center; border-top: 1px solid #94a3b8; width: 170px; padding-top: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #475569;">
+        Student Signature
+      </div>
+      <div style="text-align: center; border-top: 1px solid #94a3b8; width: 170px; padding-top: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #475569;">
+        Controller of Examinations
+      </div>
+      <div style="text-align: center; border-top: 1px solid #94a3b8; width: 170px; padding-top: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #475569;">
+        Dean / Principal
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = auth.getCurrentUser();
+      const backBtn = document.getElementById('back-dashboard-btn');
+      if (user && user.role === 'student' && backBtn) {
+        backBtn.href = 'student-dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>

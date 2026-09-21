@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBN Sinhgad Technical Institute Campus | SAMS Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 0.85rem 1.5rem; position: sticky; top: 0; z-index: 100;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), #818cf8); color: #fff; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem;">🎓</div>
+        <div>
+          <h2 style="font-size: 1.15rem; margin: 0; line-height: 1.2;">NBN Sinhgad</h2>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Technical Institute Campus • SAMS</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <button onclick="toggleTheme()" class="theme-toggle-btn">🌙 Dark</button>
+        <a href="signup.html" class="btn btn-sm btn-outline">Sign Up</a>
+        <a href="login.html" class="btn btn-sm btn-primary">Login →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main style="flex: 1;">
+    <section style="padding: 3.5rem 1.25rem; text-align: center; background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-body) 100%);">
+      <div style="max-width: 800px; margin: 0 auto;">
+        <span class="badge badge-primary" style="margin-bottom: 1rem; font-size: 0.85rem; padding: 0.4rem 1rem;">NBN Sinhgad Technical Institute Campus</span>
+        <h1 style="font-size: clamp(1.85rem, 4vw, 2.75rem); margin-bottom: 0.75rem; font-weight: 800; letter-spacing: -0.5px;">Student Academic Management System</h1>
+        <p style="font-size: clamp(0.95rem, 2vw, 1.15rem); color: var(--text-muted); max-width: 650px; margin: 0 auto 1.75rem; line-height: 1.6;">
+          Official college academic portal for <strong>NBN Sinhgad Technical Institute Campus</strong>. Built with <strong>HTML5, CSS3, Vanilla JavaScript, and Supabase PostgreSQL</strong>.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+          <a href="login.html" class="btn btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.95rem;">Sign In to Portal</a>
+          <a href="signup.html" class="btn btn-secondary" style="padding: 0.75rem 1.5rem; font-size: 0.95rem;">Create New Account</a>
+          <a href="#viva-features" class="btn btn-outline" style="padding: 0.75rem 1.5rem; font-size: 0.95rem;">DBMS Concepts</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Demo Credentials -->
+    <section style="max-width: 1000px; margin: -1.5rem auto 3rem; padding: 0 1.5rem;">
+      <div class="card" style="border-left: 4px solid var(--primary); padding: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">⚡ Quick Demo Login Credentials</h3>
+        <p style="margin-bottom: 1rem;">Test the system immediately with pre-configured roles or connect your own Supabase database:</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+          <div style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.4rem;">🔑 Administrator Role</div>
+            <div style="font-size: 0.88rem;"><strong>Email:</strong> <code>admin@college.edu</code></div>
+            <div style="font-size: 0.88rem;"><strong>Password:</strong> <code>admin123</code></div>
+            <a href="login.html" class="btn btn-sm btn-outline" style="margin-top: 0.75rem; width: 100%;">Login as Admin →</a>
+          </div>
+          <div style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <div style="font-weight: 700; color: var(--secondary); margin-bottom: 0.4rem;">🎓 Student Role</div>
+            <div style="font-size: 0.88rem;"><strong>Email:</strong> <code>aarav.sharma@college.edu</code></div>
+            <div style="font-size: 0.88rem;"><strong>Password:</strong> <code>student123</code></div>
+            <a href="login.html" class="btn btn-sm btn-outline" style="margin-top: 0.75rem; width: 100%;">Login as Student →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core DBMS Highlights (Viva Ready) -->
+    <section id="viva-features" style="max-width: 1100px; margin: 0 auto 4rem; padding: 0 1.5rem;">
+      <div style="text-align: center; margin-bottom: 2.5rem;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Database Management Features</h2>
+        <p>Demonstrating core academic database concepts implemented in PostgreSQL & Supabase.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div class="card" style="padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">⚡</div>
+          <h3>Automatic Triggers</h3>
+          <p>Triggers automatically calculate <code>total_marks</code> and assign grades (<code>A+</code>, <code>A</code>, <code>B+</code>, etc.) upon mark entry, and compute attendance percentage.</p>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">📊</div>
+          <h3>Database Views</h3>
+          <p>Created <code>student_marks_view</code> and <code>student_attendance_view</code> to join multiple normalized tables (Students, Subjects, Marks) without redundant queries.</p>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🛡️</div>
+          <h3>Row Level Security (RLS)</h3>
+          <p>Enforced PostgreSQL security policies so students can strictly access only their personal academic performance, while administrators retain full CRUD control.</p>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔗</div>
+          <h3>Relational Integrity</h3>
+          <p>Uses strict Primary Keys (UUID), Foreign Keys with <code>ON DELETE CASCADE</code>, Unique Constraints on Roll No & Enrollment No, and Check Constraints.</p>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">⚙️</div>
+          <h3>Stored Stored Function</h3>
+          <p><code>calculate_attendance_percentage()</code> safely handles division-by-zero errors when total class sessions are zero or pending.</p>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🚀</div>
+          <h3>Optimized Indexes</h3>
+          <p>B-Tree indexes on <code>roll_no</code>, <code>enrollment_no</code>, <code>student_id</code>, and <code>subject_id</code> ensure high query throughput.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer style="background: var(--bg-surface); border-top: 1px solid var(--border-color); padding: 1.75rem 1rem; text-align: center; font-size: 0.88rem; color: var(--text-muted);">
+    <p>© 2026 NBN Sinhgad Technical Institute Campus | SAMS Academic Portal</p>
+    <p style="font-size: 0.8rem; margin-top: 0.3rem;">Powered by Supabase PostgreSQL • Static Hosting on Netlify</p>
+  </footer>
+
+</body>
+</html>
